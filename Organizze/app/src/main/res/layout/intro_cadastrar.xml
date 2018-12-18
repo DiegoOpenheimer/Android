@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent">
+
+    <TextView
+            android:text="Crie sua conta grátis"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:id="@+id/textView3" android:textSize="20dp"
+            android:textColor="@android:color/black" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/textView4" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" app:layout_constraintVertical_chainStyle="packed"
+            android:layout_marginBottom="16dp" android:layout_marginTop="64dp"/>
+    <TextView
+            android:text="Junte-se a nós e comece já"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView4" android:textSize="18sp"
+            android:textColor="@android:color/darker_gray" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/textView3"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintBottom_toTopOf="@+id/buttonRegister"
+            android:layout_marginBottom="24dp"/>
+    <Button
+            android:text="CADASTRE-SE"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonRegister"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" app:layout_constraintBottom_toTopOf="@+id/buttonEnter"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+            android:layout_marginBottom="32dp" android:layout_marginTop="32dp"
+            android:textColor="@android:color/white" android:background="@color/colorPrimary"
+            android:onClick="goRegisterAccount"/>
+    <Button
+            android:text="Já tenho uma conta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonEnter"
+            android:background="@android:color/transparent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonRegister" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:textColor="@android:color/darker_gray" android:onClick="goLogin"/>
+</android.support.constraint.ConstraintLayout>
