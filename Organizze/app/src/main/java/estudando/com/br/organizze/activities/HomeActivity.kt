@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -32,7 +31,6 @@ import kotlinx.android.synthetic.main.floating_menu.*
 import model.Movement
 import model.User
 import services.HandlerFirebase
-import services.HandlerUserDatabaseFirebase
 import java.text.DecimalFormat
 
 class HomeActivity : AppCompatActivity() {
@@ -116,11 +114,13 @@ class HomeActivity : AppCompatActivity() {
     private fun getCurrentDate() {
         mountCalendar()
         val calendarDay: CalendarDay = calendarView.currentDate
-        currentDate = calendarDay.month.toString() + "" + calendarDay.year
+        var month: String = if (calendarDay.month < 10) '0' + calendarDay.month.toString() else calendarDay.month.toString()
+        currentDate = month + "" + calendarDay.year
         calendarView.setOnMonthChangedListener {
             materialCalendarView: MaterialCalendarView, calendarDay: CalendarDay ->
-            currentDate = calendarDay.month.toString() + "" + calendarDay.year
-            listenEventsFirebase()
+            month = if (calendarDay.month < 10) '0' + calendarDay.month.toString() else calendarDay.month.toString()
+            currentDate = month + "" + calendarDay.year
+            listenEventsMovement()
         }
     }
 
@@ -131,13 +131,10 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
-    private fun listenMovements() {
-
-    }
-
     override fun onStart() {
         super.onStart()
-        listenEventsFirebase()
+        listenEventsUserFirebase()
+        listenEventsMovement()
     }
 
 
@@ -146,8 +143,10 @@ class HomeActivity : AppCompatActivity() {
         clearEvents()
     }
 
-    private fun listenEventsFirebase() {
-        clearEvents()
+    private fun listenEventsUserFirebase() {
+        if ( ::listenUserEvents.isInitialized ) {
+            firebaseDatabase.removeEventListener(listenUserEvents)
+        }
         val user: FirebaseUser? = firebaseAuth.currentUser
         if ( user != null ) {
             listenUserEvents = firebaseDatabase.child("users")
@@ -166,6 +165,17 @@ class HomeActivity : AppCompatActivity() {
                     }
 
                 } )
+        }
+    }
+
+    private fun listenEventsMovement() {
+        recyclerViewHome.visibility = View.GONE
+        progressList.visibility = View.VISIBLE
+        if ( ::listenMovementsEvents.isInitialized ) {
+            firebaseDatabase.removeEventListener(listenMovementsEvents)
+        }
+        val user: FirebaseUser? = firebaseAuth.currentUser
+        if (user != null) {
             listenMovementsEvents = firebaseDatabase.child("Movement")
                 .child(user.email.toString().stringToBase64())
                 .child(currentDate.toString())
@@ -182,9 +192,14 @@ class HomeActivity : AppCompatActivity() {
                                 movements.add( movement )
                             }
                         }
+                        recyclerViewHome.visibility = View.VISIBLE
+                        progressList.visibility = View.GONE
                         viewAdapter.notifyDataSetChanged()
                     }
                 })
+        } else {
+            recyclerViewHome.visibility = View.VISIBLE
+            progressList.visibility = View.GONE
         }
     }
 

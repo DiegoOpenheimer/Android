@@ -30,4 +30,8 @@
         <item name="colorAccent">@color/colorAccentDespesa</item>
     </style>
 
+    <style name="ProgressColorPrimary">
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
 </resources>
